@@ -1,0 +1,93 @@
+clc
+
+%% War Computer Games
+% Description: 2 player war game with a suffled deck to ensure fair gameplay.
+
+%Generate an unshuffled deck of cards where the suit is irrelevant
+fprintf('Welcome to War! Prepare yourself for an unforgettable battle \n')
+
+k = input('Are you ready to evicerate your opponent?. [Y/N]','s')
+if k == 'N'
+    fprintf('Too bad, you are playing anyway \n')
+end
+
+
+V = [2:14];
+Deck = repelem(V,4)
+fprintf('Here is the unshuffled deck of cards \n')
+
+S = input('In order to shuffle these cards, enter your birth month \n')
+if S == (0:13)
+end
+
+
+%Shuffle the cards
+Shuffled = Deck(randperm(length(Deck)))
+fprintf('The deck of cards is now shuffled \n')
+
+fprintf('\n The shuffled deck has been split between the two of you \n')
+%Split the deck between two players
+player1Hand = Shuffled(1:26);
+player2Hand = Shuffled(27:end);
+
+fprintf('The war has now begun! You will both draw the first card in your hand and compare their values. \n Whoever has the higher value card wins that battle and claims their opponents card. Good luck! \n')
+while player1Hand > 0 
+%Assign the first value in each hand to variables
+A = player1Hand(1);
+B = player2Hand(1);
+
+%Request each player to pick up their first card
+player1Card = input('Player 1 click A')
+player2Card = input('Player 2 click B')
+
+%Compare the cards
+
+if player1Card > player2Card
+    %Add the lower card to the winner's hand and remove that card from the
+    %loser's hand
+    player1Hand(end+1) = player2Card;
+    player2Hand(1) = [];
+    %shift winner's hand one to the left so winning card goes to the back
+    player1Hand = circshift(player1Hand, -1);
+    %display the amount of cards that each player has left in their hand
+    S1 = length(player1Hand);
+    S2 = length(player2Hand);
+    fprintf('Player 1 score is %f and Player 2 score is %f \n', S1, S2)
+elseif player2Card > player1Card
+    player2Hand(end+1) = player1Card;
+    player1Hand(1) = [];
+    player2Hand = circshift(player2Hand, -1);
+    S1 = length(player1Hand);
+    S2 = length(player2Hand);
+    fprintf('Player 1 score is %f and Player 2 score is %f \n', S1, S2)
+elseif player1Card == player2Card
+    fprintf('Because your cards are equal to each other, you will both put down your next two cards face down and then compare the next card after that. \n Whoever has the higher value takes all of the cards in play \n') 
+    j = input('Does that make sense? [Y,N]', 's')
+    if j == 'N'
+        fprintf('Re-read the explanation \n')
+    else 
+    end
+        
+    if player1Hand(4) > player2Hand(4)
+        player1Hand((end+1):(end+4)) = player2Hand(1:4)
+        player2Hand(1:4) = []
+        S1 = length(player1Hand);
+        S2 = length(player2Hand);
+    fprintf('Player 1 score is %f and Player 2 score is %f \n', S1, S2)
+    elseif player2Hand(4) > player1Hand(4)
+        player2Hand((end+1):(end+4)) = player1Hand(1:4)
+        player1Hand(1:4) = []
+        S1 = length(player1Hand);
+        S2 = length(player2Hand);
+    fprintf('Player 1 score is %f and Player 2 score is %f \n', S1, S2)
+    end
+end
+if player2Hand == 0
+    break
+end
+end
+if player1Hand == 0
+    fprintf('Player 1 Wins the War!')
+elseif player2Hand == 0
+    fprintf('Player 2 Wins the War!')
+end
