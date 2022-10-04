@@ -1,0 +1,18 @@
+// Programmed an Arduino to interpret pressure from machine doors, illuminating an LED accordingly.
+
+// Open data ports to read and write
+pinMode(IO_PORT 1, INPUT);
+pinMode(IO_PORT 3, OUTPUT);
+
+// Initialize pressure variable
+pressure = digitalRead(IO_PORT 1);
+
+// When pressure is detected, turn LED on high
+if (pressure > 0) {
+  digitalWrite(IO_PORT, HIGH);
+}
+
+// When pressure is no longer applied, turn LED off
+digitalWrite(IO_PORT 3, LOW);
+
+endMyCode();
