@@ -1,0 +1,1659 @@
+clc
+clear
+
+%% Battleship Computer Game
+% Description: 2 player battleship game equipt with sounds, visuals, and text based commands.
+
+[a,fs]=audioread(' Soundtrack.wav');
+sound(a,fs)
+% length of the ships
+%ship 1 is carrier with length 5
+%ship 2 is battleship with length 4
+%ship 3 is submarine with length 3
+%ship 4 is cruiser with length 4
+%ship 5 is destroyer with length 2
+ship_length = [5,4,3,3,2];
+
+disp('MatLab Battleship')
+Name1=input('Enter Player 1''s name','s');
+% Initialize scene
+my_scene = simpleGameEngine('Battleship.png', 84, 84);
+
+% Set up variables to name the various sprites
+blank_sprite = 1;
+water_sprite = 2;
+left_ship_sprite = 3;
+horiz_ship_sprite = 4;
+right_ship_sprite = 5;
+top_ship_sprite = 6;
+vert_ship_sprite = 7;
+bot_ship_sprite = 8;
+hit_sprite = 9;
+miss_sprite = 10;
+%display board
+board_display1=water_sprite*ones(10,21);
+board_display1(:,11)=blank_sprite;
+drawScene(my_scene,board_display1)
+%have player place battleships
+fprintf('%s,It is now time to place your ships.\n', Name1);
+fprintf('DO NOT OVERLAP YOUR SHIPS\n')
+
+%select coordinates for carrier
+%Vertical or horizontal ship placement 
+%1 for vertical, 0 for horizontal
+
+
+d=input('\Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+c=input('\nSelect a column coordinate between 1 and 5 for the carrier');
+
+while c>5 || c<1
+    c=input('\nSelect a column coordinate between 1 and 5 for the carrier');
+    
+    if c<=5 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate for the carrier');
+
+while r>10
+    r=input('\nSelect a row coordinate between 1 and 10');
+    
+    if r<=10 && r>=1
+        break
+    end
+end
+Player1CoordinateA1=[r,c];
+board_display1(r,c)=left_ship_sprite;
+c=c+1;
+Player1CoordinateA2=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+Player1CoordinateA3=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+Player1CoordinateA4=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+Player1CoordinateA5=[r,c];
+board_display1(r,c)=right_ship_sprite;
+drawScene(my_scene,board_display1);
+
+
+end
+if d==1;
+   c=input('\nSelect a column coordinate between 1 and 10 for the carrier');
+  
+while  c>10 || c<=0
+    c=input('Select a column coordinate between 1 and 10');
+    
+    if c<=10 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate between 1 and 6');
+
+while r>6 || r<1
+    r=input('Select a row coordinate between 1 and 6');
+    
+    if r<=6 && r>=1
+        break
+    end
+end
+Player1CoordinateA6=[r,c];
+board_display1(r,c)=top_ship_sprite;
+r=r+1;
+Player1CoordinateA7=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+Player1CoordinateA8=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+Player1CoordinateA9=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+Player1CoordinateA10=[r,c];
+board_display1(r,c)=bot_ship_sprite;
+drawScene(my_scene,board_display1);
+
+end
+
+if d==0;
+    Player1CoordinateA6=[1,12];
+    board_display1(1,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0;
+    Player1CoordinateA7=[2,12];
+    board_display1(2,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+      if d==0;
+    Player1CoordinateA8=[3,12];
+    board_display1(3,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+      end
+if d==0;
+    Player1CoordinateA9=[4,12];
+    board_display1(4,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0;
+    Player1CoordinateA10=[5,12];
+    board_display1(5,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+
+end
+if d==1;
+    Player1CoordinateA1=[3,13];
+    board_display1(3,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateA2=[4,13];
+    board_display1(4,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateA3=[5,13];
+    board_display1(5,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateA4=[6,13];
+    board_display1(6,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateA5=[7,13];
+    board_display1(7,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+
+%select coordinates for battleship
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+c=input('\nSelect a column coordinate between 1 and 6 for the battleship');
+
+
+while c>6 || c<1
+    c=input('\nSelect a smaller column coordinate');
+    player1c=c;
+    if c<=6 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate for the battleship');
+
+while r>10
+    r=input('\nSelect a smaller row coordinate');
+    player1r=r;
+    if r<=10
+        break
+    end
+end
+Player1CoordinateB1=[r,c];
+board_display1(r,c)=left_ship_sprite;
+c=c+1;
+
+Player1CoordinateB2=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+
+Player1CoordinateB3=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+
+Player1CoordinateB4=[r,c];
+board_display1(r,c)=right_ship_sprite;
+
+drawScene(my_scene,board_display1);
+
+
+end
+if d==1;
+    c=input('\nSelect a column coordinate between 1 and 10 for the battleship'); 
+ 
+while  c>10 || c<=0
+    c=input('Select a column coordinate between 1 and 10');
+
+    if c<=10 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate between 1 and 7');
+
+while r>7 || r<1
+    r=input('Select a row coordinate between 1 and 7');
+ 
+    if r<=7 && r>=1
+        break
+    end
+end
+Player1CoordinateB5=[r,c];
+board_display1(r,c)=top_ship_sprite;
+r=r+1;
+
+Player1CoordinateB6=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+
+Player1CoordinateB7=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+
+Player1CoordinateB8=[r,c];
+board_display1(r,c)=bot_ship_sprite;
+
+drawScene(my_scene,board_display1);
+
+end
+if d==0
+    Player1CoordinateB5=[6,12];
+    board_display1(6,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0;
+    Player1CoordinateB6=[7,12];
+    board_display1(7,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0;
+    Player1CoordinateB7=[8,12];
+    board_display1(8,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0;
+    Player1CoordinateB8=[9,12];
+    board_display1(9,12)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1
+    Player1CoordinateB1=[2,13];
+    board_display1(2,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateB2=[2,14];
+    board_display1(2,14)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateB3=[2,15];
+    board_display1(2,15)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1;
+    Player1CoordinateB4=[2,16];
+    board_display1(2,16)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+
+%select coordinates for submarine
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+c=input('\nSelect a column coordinate bewteen 1 and 7 for the submarine');
+
+while c>7
+    c=input('\nSelect a smaller column coordinate');
+    
+    if c<=7
+        break
+    end
+end
+r=input('\nSelect a row coordinate for the submarine');
+while r>10
+    r=input('\n Select a row number between 1 and 10');
+   
+    if r<=10
+        break
+    end
+end
+end
+ Player1CoordinateC1=[r,c];
+board_display1(r,c)=left_ship_sprite;
+c=c+1;
+Player1CoordinateC2=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+Player1CoordinateC3=[r,c];
+board_display1(r,c)=right_ship_sprite;
+drawScene(my_scene,board_display1);
+
+
+if d==1
+    c=input('\nSelect a column coordinate between 1 and 10 for the submarine');
+   
+while  c>10 || c<=0
+    c=input('Select a column coordinate between 1 and 10');
+   
+    if c<=10 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate between 1 and 8');
+
+while r>4 || r<1
+    r=input('Select a row coordinate between 1 and 8');
+   
+    if r<=8 && r>=1
+        break
+    end
+end
+Player1CoordinateC4=[r,c];
+board_display1(r,c)=top_ship_sprite;
+r=r+1;
+Player1CoordinateC5=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+Player1CoordinateC6=[r,c];
+board_display1(r,c)=bot_ship_sprite;
+drawScene(my_scene,board_display1);
+
+end
+if d==0
+    Player1CoordinateC4=[3,14];
+    board_display1(3,14)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0
+    Player1CoordinateC5=[4,14];
+    board_display1(4,14)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==0
+    Player1CoordinateC6=[5,14];
+    board_display1(5,14)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1
+    Player1CoordinateC1=[8,13];
+    board_display1(8,13)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1
+    Player1CoordinateC2=[8,14];
+    board_display1(8,14)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+if d==1
+    Player1CoordinateC3=[8,15];
+    board_display1(8,15)=water_sprite;
+    drawScene(my_scene,board_display1);
+end
+
+%select coordinates for cruiser
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+c=input('\nSelect a column coordinate between 1 and 6 for the cruiser');
+
+while c>6
+    c=input('\nSelect a smaller column coordinate');
+    
+    if c<=6 
+        break
+    end
+end
+r=input('\nSelect a row coordinate for the cruiser');
+
+while r>10
+    r=input('\nSelect a row coordinate between 1 and 10');
+    
+    if r<=10 
+        break
+    end
+end
+Player1CoordinateD1=[r,c];
+board_display1(r,c)=left_ship_sprite;
+c=c+1;
+Player1CoordinateD2=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+Player1CoordinateD3=[r,c];
+board_display1(r,c)=horiz_ship_sprite;
+c=c+1;
+Player1CoordinateD4=[r,c];
+board_display1(r,c)=right_ship_sprite;
+drawScene(my_scene,board_display1);
+
+end
+if d==1
+    c=input('\nSelect a column coordinate between 1 and 10 for the cruiser'); 
+   
+while  c>10 || c<=0
+    c=input('Select a column coordinate between 1 and 10');
+    
+    if c<=10 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate between 1 and 7');
+
+while r>7 || r<1
+    r=input('Select a row coordinate between 1 and 7');
+    
+    if r<=7 && r>=1
+        break
+    end
+end
+Player1CoordinateD5=[r,c];
+board_display1(r,c)=top_ship_sprite;
+r=r+1;
+Player1CoordinateD6=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+Player1CoordinateD7=[r,c];
+board_display1(r,c)=vert_ship_sprite;
+r=r+1;
+Player1CoordinateD8=[r,c];
+board_display1(r,c)=bot_ship_sprite;
+drawScene(my_scene,board_display1);
+
+end
+if d==0
+    Player1CoordinateD5=[1,17];
+    board_display1(1,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==0
+    Player1CoordinateD6=[2,17];
+    board_display1(2,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==0
+    Player1CoordinateD7=[3,17];
+    board_display1(3,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==0
+    Player1CoordinateD8=[4,17];
+    board_display1(4,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==1
+    Player1CoordinateD1=[5,17];
+    board_display1(5,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==1
+    Player1CoordinateD2=[6,17];
+    board_display1(6,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==1
+    Player1CoordinateD3=[7,17];
+    board_display1(7,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==1
+    Player1CoordinateD3=[8,17];
+    board_display1(8,17)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+
+%select coordinates for destroyer
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+c=input('\nSelect a column coordinate between 1 and 8 for the destroyer');
+
+while c>8 || c<1
+    c=input('\nSelect a different column coordinate');
+    
+    if c<=8 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate for the destroyer');
+
+while r>10||r<1
+    r=input('\n Select a row coordinate between 1 and 10');
+   
+    if r<=10 && r>=1
+        break
+    end
+end
+Player1CoordinateE1=[r,c];
+board_display1(r,c)=left_ship_sprite;
+c=c+1;
+Player1CoordinateE2=[r,c];
+board_display1(r,c)=right_ship_sprite;
+c=c+1;
+drawScene(my_scene,board_display1);
+
+end
+if d==1
+    c=input('\nSelect a column coordinate between 1 and 10 for the destroyer'); 
+    
+while  c>10 || c<=0
+    c=input('Select a column coordinate between 1 and 10');
+    
+    if c<=10 && c>=1
+        break
+    end
+end
+r=input('\nSelect a row coordinate between 1 and 9');
+
+while r>9 || r<1
+    r=input('Select a row coordinate between 1 and 9');
+    
+    if r<=9 && r>=1
+        break
+    end
+end
+Player1CoordinateE3=[r,c];
+board_display1(r,c)=top_ship_sprite;
+r=r+1;
+Player1CoordinateE4=[r,c];
+board_display1(r,c)=bot_ship_sprite;
+drawScene(my_scene,board_display1);
+
+end
+
+if d==0
+    Player1CoordinateE3=[1,18];
+    board_display1(1,18)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==0
+    Player1CoordinateE4=[1,19];
+    board_display1(1,19)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+
+if d==1
+  Player1CoordinateE1=[1,20];
+  board_display1(1,20)=water_sprite;
+    drawScene(my_scene,board_display1)
+end
+if d==1
+     Player1CoordinateE2=[1,21];
+     board_display1(1,21)=water_sprite;
+    drawScene(my_scene,board_display1)
+     
+end
+
+%PLAYER 2 
+
+my_scene = simpleGameEngine('Battleship.png', 84, 84);
+board_display2=water_sprite*ones(10,21);
+board_display2(:,11)=blank_sprite;
+drawScene(my_scene,board_display2)
+Name2=input('Enter Player 2''s name','s');
+
+% Set up variables to name the various sprites
+
+blank_sprite = 1;
+water_sprite = 2;
+left_ship_sprite = 3;
+horiz_ship_sprite = 4;
+right_ship_sprite = 5;
+top_ship_sprite = 6;
+vert_ship_sprite = 7;
+bot_ship_sprite = 8;
+hit_sprite = 9;
+miss_sprite = 10;
+fprintf('%s,It is now time to place your ships.\n', Name2);
+fprintf('DO NOT OVERLAP SHIPS\n');
+
+%have player 2 place ships
+
+%select coordinates for carrier
+
+%Vertical or horizontal ship placement 
+%1 for vertical, 0 for horizontal
+d=input('\Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+e=input('\nSelect a column coordinate between 12 and 17 for the carrier');
+while e>17 || e<12
+    e=input('\nSelect a column coordinate between 12 and 17 for the carrier');
+    if e<=17 && e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate between 1 and 10 for the carrier');
+while f>10
+    f=input('\nSelect a row coordinate between 1 and 10');
+    if f<=10 && f>=1
+        break
+    end
+end
+Player2CoordinateA1=[f,e];
+board_display2(f,e)=left_ship_sprite;
+e=e+1;
+Player2CoordinateA2=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateA3=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateA4=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateA5=[f,e];
+board_display2(f,e)=right_ship_sprite;
+
+drawScene(my_scene,board_display2);
+
+end
+
+if d==1;
+   e=input('\nSelect a column coordinate between 12 and 21 for the carrier'); 
+while  e>10 || e<=0
+    e=input('Select a column coordinate between 12 and 21');
+    if e<=10 && e>=1
+        break
+    end
+end
+f=input('\nSelect a row coordinate between 1 and 6');
+while f>6 || f<1
+    f=input('Select a row coordinate between 1 and 6');
+    if f<=6 && f>=1
+        break
+    end
+end
+Player2CoordinateA6=[f,e];
+board_display2(f,e)=top_ship_sprite;
+f=f+1;
+Player2CoordinateA7=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateA8=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateA9=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateA10=[f,e];
+board_display2(f,e)=bot_ship_sprite;
+drawScene(my_scene,board_display2);
+
+
+end
+if d==0;
+    Player2CoordinateA6=[1,1];
+    board_display2(1,1)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateA7=[2,1];
+    board_display2(2,1)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+      if d==0;
+    Player2CoordinateA8=[3,1];
+    board_display2(3,1)=water_sprite;
+    drawScene(my_scene,board_display2);
+      end
+if d==0;
+    Player2CoordinateA9=[4,1];
+    board_display2(4,1)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateA10=[5,1];
+    board_display2(5,1)=water_sprite;
+    drawScene(my_scene,board_display2);
+
+end
+if d==1;
+    Player2CoordinateA1=[3,10];
+    board_display2(3,10)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateA2=[4,10];
+    board_display2(4,10)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateA3=[5,10];
+    board_display2(5,10)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateA4=[6,10];
+    board_display2(6,10)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateA5=[7,10];
+    board_display2(7,10)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+
+%select coordinates for battleship
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+e=input('\nSelect a column coordinate between 12 and 18 for the battleship');
+while e>18 || e<12
+    e=input('\nSelect a  column coordinate between 12 and 18');
+    if e<=18 && e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate for the battleship');
+while f>10
+    f=input('\nSelect a smaller row coordinate');
+    if f<=10
+        break
+    end
+end
+Player2CoordinateB1=[f,e];
+board_display2(f,e)=left_ship_sprite;
+e=e+1;
+Player2CoordinateB2=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateB3=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateB4=[f,e];
+board_display2(f,e)=right_ship_sprite;
+drawScene(my_scene,board_display2);
+
+end
+if d==1
+    e=input('\nSelect a column coordinate between 12 and 21 for the battleship');
+   while  e>21 || e<12
+    e=input('Select a column coordinate between 12 and 21');
+    if e<=21 && e>=12
+        break
+    end
+   end
+
+f=input('\nSelect a row coordinate between 1 and 7');
+while f>7 || f<1
+    f=input('Select a row coordinate between 1 and 7');
+    if f<=7 && f>=1
+        break
+    end
+end
+Player2CoordinateB5=[f,e];
+board_display2(f,e)=top_ship_sprite;
+f=f+1;
+Player2CoordinateB6=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateB7=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateB8=[f,e];
+board_display2(f,e)=bot_ship_sprite;
+drawScene(my_scene,board_display2);
+
+end
+if d==0
+    Player2CoordinateB5=[2,2];
+    board_display2(2,2)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateB6=[3,2];
+    board_display2(3,2)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateB7=[4,2];
+    board_display2(4,2)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateB8=[5,2];
+    board_display2(5,2)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1
+    Player2CoordinateB1=[2,3];
+    board_display2(2,3)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateB2=[2,4];
+    board_display2(2,4)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateB3=[2,5];
+    board_display2(2,5)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1;
+    Player2CoordinateB4=[2,6];
+    board_display2(2,6)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+
+%select coordinates for submarine
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+e=input('\nSelect a column coordinate between 12 and 19 for the submarine');
+
+while e>19||e<12
+    e=input('\nSelect a  column coordinate between 12 and 19');
+    if e<=19||e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate between 1 and 10 for the submarine');
+
+while f>10
+    f=input('\n Select a row number between 1 and 10');
+    if f<=10
+        break
+    end
+end
+Player2CoordinateC1=[f,e];
+board_display2(f,e)=left_ship_sprite;
+e=e+1;
+Player2CoordinateC2=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateC3=[f,e];
+board_display2(f,e)=right_ship_sprite;
+drawScene(my_scene,board_display2);
+
+end
+if d==1
+    e=input('\nSelect a column coordinate between 12 and 21 for the submarine'); 
+    
+while  e>21 || e<12
+    e=input('Select a column coordinate from 12 to 21');
+    if e<=21 && e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate between 1 and 8');
+while f>8 || f<1
+    f=input('Select a row coordinate between 1 and 8');
+    if f<=8 && f>=1
+        break
+    end
+end
+Player2CoordinateC4=[f,e];
+board_display2(f,e)=top_ship_sprite;
+f=f+1;
+Player2CoordinateC5=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateC6=[f,e];
+board_display2(f,e)=bot_ship_sprite;
+drawScene(my_scene,board_display2);
+
+end
+if d==0
+    Player2CoordinateC4=[3,3];
+    board_display2(3,3)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateC5=[4,3];
+    board_display2(4,3)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==0;
+    Player2CoordinateC6=[5,3];
+    board_display2(5,3)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1
+    Player2CoordinateC1=[3,4];
+    board_display2(3,4)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1
+    Player2CoordinateC2=[3,5];
+    board_display2(3,5)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+if d==1
+    Player2CoordinateC3=[3,6];
+    board_display2(3,6)=water_sprite;
+    drawScene(my_scene,board_display2);
+end
+
+%select coordinates for cruiser
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+e=input('\nSelect a column coordinate between 12 and 18 for the cruiser');
+while e>18||e<12
+    e=input('\nSelect a  column coordinate from 12 to 18');
+    if e<=18|| e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate for the cruiser');
+while f>10
+    f=input('\nSelect a row coordinate between 1 and 10');
+    if f<=10 
+        break
+    end
+end
+Player2CoordinateD1=[f,e];
+board_display2(f,e)=left_ship_sprite;
+e=e+1;
+Player2CoordinateD2=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateD3=[f,e];
+board_display2(f,e)=horiz_ship_sprite;
+e=e+1;
+Player2CoordinateD4=[f,e];
+board_display2(f,e)=right_ship_sprite;
+drawScene(my_scene,board_display2);
+
+end
+if d==1
+    e=input('\nSelect a column coordinate between 12 and 21 for the cruiser'); 
+   
+while  e>21 || e<12
+    e=input('Select a column coordinate from 12 to 21');
+    if e<=21 && e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate from 1 to 7');
+
+while f>7 || f<1
+    f=input('Select a row coordinate from 1 to 7');
+    if f<=7 && f>=1
+        break
+    end
+end
+Player2CoordinateD5=[f,e];
+board_display2(f,e)=top_ship_sprite;
+f=f+1;
+Player2CoordinateD6=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateD7=[f,e];
+board_display2(f,e)=vert_ship_sprite;
+f=f+1;
+Player2CoordinateD8=[f,e];
+board_display2(f,e)=bot_ship_sprite;
+drawScene(my_scene,board_display2);
+
+end
+if d==0
+    Player2CoordinateD5=[6,1];
+    board_display2(6,1)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==0
+    Player2CoordinateD6=[7,1];
+    board_display2(7,1)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==0
+    Player2CoordinateD7=[8,1];
+    board_display2(8,1)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==0
+    Player2CoordinateD8=[9,1];
+    board_display2(9,1)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==1
+    Player2CoordinateD1=[1,7];
+    board_display2(1,7)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==1
+    Player2CoordinateD2=[1,8];
+    board_display2(1,8)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==1
+    Player2CoordinateD3=[1,9];
+    board_display2(1,9)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==1
+    Player2CoordinateD3=[1,10];
+    board_display2(1,10)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+  
+%select coordinates for destroyer
+%Vertical or horizontal ship placement
+%1 for vertical, 0 for horizontal
+d=input('\n Select 1 for vertical ship direction or 0 for horizontal ship direction');
+if d==0
+e=input('\nSelect a column coordinate between 12 and 20 for the destroyer');
+while e>20 || e<12
+    e=input('\nSelect a  column coordinate from 12 to 20');
+    if e<=20 && e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate for the destroyer');
+while f>10
+    f=input('\n Select a row coordinate from 1 to 10');
+    if f<=10 && f>=1
+        break
+    end
+end
+Player2CoordinateE1=[f,e];
+board_display2(f,e)=left_ship_sprite;
+e=e+1;
+Player2CoordinateE2=[f,e];
+board_display2(f,e)=right_ship_sprite;
+e=e+1;
+drawScene(my_scene,board_display2);
+
+end
+if d==1
+    e=input('\nSelect a column coordinate between 12 and 21 for the destroyer'); 
+while  e>21 || e<12
+    e=input('Select a column coordinate between 12 and 21');
+    if e<=21 && e>=12
+        break
+    end
+end
+f=input('\nSelect a row coordinate between 1 and 9');
+while f>9 || f<1
+    f=input('Select a row coordinate between 1 and 9');
+    if f<=9 && f>=1
+        break
+    end
+end
+Player2CoordinateE3=[f,e];
+board_display2(f,e)=top_ship_sprite;
+f=f+1;
+Player2CoordinateE4=[f,e];
+board_display2(f,e)=bot_ship_sprite;
+drawScene(my_scene,board_display2);
+end
+if d==0
+    Player2CoordinateE3=[6,2];
+    board_display2(6,2)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==0
+    Player2CoordinateE4=[7,2];
+    board_display2(7,2)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+
+if d==1
+  Player2CoordinateE1=[10,1];
+  board_display2(10,1)=water_sprite;
+    drawScene(my_scene,board_display2)
+end
+if d==1
+     Player2CoordinateE2=[10,2];
+     board_display2(10,2)=water_sprite;
+    drawScene(my_scene,board_display2)
+     
+end
+
+
+
+
+
+%MASTER WHILE LOOP
+
+%hit/miss layer for players
+
+%Player 1 Guess Coordinates
+
+my_scene = simpleGameEngine('Battleship.png', 84, 84);
+board_display3=water_sprite*ones(10,21);
+board_display3(:,11)=blank_sprite;
+drawScene(my_scene,board_display3); 
+
+
+Practice=-1;
+turn=1;
+Player1Points=0;
+Player2Points=0;
+while Practice<0
+Player1ColumnGuess = input('\n Player 1 select a column from 12 to 21');
+Player1RowGuess = input('\n Player 1 select a row from 1 to 10');
+Player1Guess=[Player1RowGuess,Player1ColumnGuess];
+   
+if Player1Guess==Player2CoordinateA1    
+    board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3); 
+    Player1Points=Player1Points+1
+elseif Player1Guess==Player2CoordinateA2
+    board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+elseif Player1Guess==Player2CoordinateA3
+    board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+elseif Player1Guess==Player2CoordinateA4
+         board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+elseif Player1Guess==Player2CoordinateA5
+         board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateA6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+     elseif Player1Guess==Player2CoordinateA7
+         board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateA8
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateA9
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateA10
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+     elseif Player1Guess==Player2CoordinateB5
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB7
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateB8
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateC1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+     elseif Player1Guess==Player2CoordinateC2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateC3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateC4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateC5
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateC6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+elseif Player1Guess==Player2CoordinateD1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateD2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+elseif Player1Guess==Player2CoordinateD3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateD4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateD5
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateD6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateD7
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess==Player2CoordinateD8
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateE1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateE2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateE3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+    elseif Player1Guess==Player2CoordinateE4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player1Points=Player1Points+1
+
+elseif Player1Guess~=Player2CoordinateA1    
+    board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3); 
+elseif Player1Guess~=Player2CoordinateA2
+    board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player1Guess~=Player2CoordinateA3
+    board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player1Guess~=Player2CoordinateA4
+         board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player1Guess~=Player2CoordinateA5
+         board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateA6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+     elseif Player1Guess~=Player2CoordinateA7
+         board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateA8
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateA9
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateA10
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+     elseif Player1Guess~=Player2CoordinateB5
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB7
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateB8
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateC1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+     elseif Player1Guess~=Player2CoordinateC2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateC3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateC4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateC5
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateC6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player1Guess~=Player2CoordinateD1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateD2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player1Guess~=Player2CoordinateD3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateD4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateD5
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateD6
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateD7
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateD8
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateE1
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateE2
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateE3
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player1Guess~=Player2CoordinateE4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+end
+
+turn=2;
+
+Player2ColumnGuess = input('\n Player 2 select a column from 1 to 10');
+Player2RowGuess = input('\n Player 2 select a row from 1 to 10');
+Player2Guess=[Player2RowGuess,Player2ColumnGuess];
+   
+if Player2Guess==Player1CoordinateA1    
+    board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3); 
+    Player2Points=Player2Points+1
+elseif Player2Guess==Player1CoordinateA2
+    board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+elseif Player2Guess==Player1CoordinateA3
+    board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+elseif Player2Guess==Player1CoordinateA4
+         board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+elseif Player2Guess==Player1CoordinateA5
+         board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateA6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+     elseif Player2Guess==Player1CoordinateA7
+         board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateA8
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateA9
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateA10
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+     elseif Player2Guess==Player1CoordinateB5
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB7
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateB8
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateC1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+     elseif Player2Guess==Player1CoordinateC2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateC3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateC4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateC5
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateC6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+elseif Player2Guess==Player1CoordinateD1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateD2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+elseif Player2Guess==Player1CoordinateD3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateD4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateD5
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateD6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateD7
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateD8
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateE1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateE2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateE3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+    elseif Player2Guess==Player1CoordinateE4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=hit_sprite;
+    drawScene(my_scene,board_display3);
+    Player2Points=Player2Points+1
+
+
+
+elseif Player2Guess~=Player1CoordinateA1    
+    board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3); 
+elseif Player2Guess~=Player1CoordinateA2
+    board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player2Guess~=Player1CoordinateA3
+    board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player2Guess~=Player1CoordinateA4
+         board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player2Guess~=Player1CoordinateA5
+         board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateA6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+     elseif Player2Guess~=Player1CoordinateA7
+         board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateA8
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateA9
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateA10
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+     elseif Player2Guess~=Player1CoordinateB5
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB7
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateB8
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateC1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+     elseif Player2Guess~=Player1CoordinateC2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateC3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateC4
+        board_display3(Player1RowGuess,Player1ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateC5
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateC6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player2Guess~=Player1CoordinateD1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateD2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+elseif Player2Guess~=Player1CoordinateD3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateD4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateD5
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateD6
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateD7
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateD8
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateE1
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateE2
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateE3
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    elseif Player2Guess~=Player1CoordinateE4
+        board_display3(Player2RowGuess,Player2ColumnGuess)=miss_sprite;
+    drawScene(my_scene,board_display3);
+    turn=1
+    end
+if Player2Points==18  
+    break
+end
+if Player1Points==18
+    break
+end
+end
+if Player2Points==18
+fprintf('Congratulations Player 2\n')
+end
+if Player1Points==18
+    fprintf('Congratulations Player 1\n')
+end
