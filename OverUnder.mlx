@@ -4,7 +4,7 @@ clc
 % Description: This is a single player game in which a user inputs a guess
 % of whether a random number will be over or under another random number.
 % This mini game can be played as many times as the user wants until they
-% are satisfied.
+% are satisfied. Programmed using MATLAB
 
 % Define Variables:
 gameDecision = "yes";
