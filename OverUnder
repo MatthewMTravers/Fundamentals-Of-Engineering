@@ -1,0 +1,87 @@
+clc
+
+%% Over Under Computer Game
+% Description: This is a single player game in which a user inputs a guess
+% of whether a random number will be over or under another random number.
+% This mini game can be played as many times as the user wants until they
+% are satisfied.
+
+% Define Variables:
+gameDecision = "yes";
+overUnderDecision = "";
+balanceAmount = 0;
+wagerAmount = 0;
+subsequentGame = "yes";
+
+% Welcome user to game, explain the rules, and ask if they want to play, if
+% yes, ask how much they want to play with
+fprintf("\nWelcome to Over Under!\n\n")
+fprintf("This is a single player game where you will guess whether a random number is over or under another random number between 1 and 10\n\n")
+gameDecision = input("Would you like to play this game?", 's');
+if isequal(gameDecision, "yes") | isequal(gameDecision, "Yes") | isequal(gameDecision, "YES") | isequal(gameDecision, " YES") | isequal(gameDecision, " yes") | isequal(gameDecision, " Yes")
+    balanceAmount = input("\nHow much would you like to add to your balance today?");
+end
+
+% Start the game if they want to, end it if they don't
+if isequal(gameDecision, "no") | isequal(gameDecision, "No") | isequal(gameDecision, "NO") | isequal(gameDecision, " NO") | isequal(gameDecision, " no") | isequal(gameDecision, " No")
+    fprintf("\nI'm sorry to hear that, maybe another day!")
+end
+
+while balanceAmount > 0 && (isequal(subsequentGame, "yes") | isequal(subsequentGame, " yes")) && (isequal(gameDecision, "yes") | isequal(gameDecision, "Yes") | isequal(gameDecision, "YES") | isequal(gameDecision, " YES") | isequal(gameDecision, " yes") | isequal(gameDecision, " Yes"))
+    % Loop to prevent same random number:
+    baseNumber = randi(10);
+    guessNumber = randi(10);
+    while guessNumber == baseNumber
+        guessNumber = randi(10);
+    end
+    if isequal(gameDecision, "yes") | isequal(gameDecision, "Yes") | isequal(gameDecision, "YES") | isequal(gameDecision, " YES") | isequal(gameDecision, " yes") | isequal(gameDecision, " Yes")
+        % If they want to play, ask them how much of their balance they
+        % want to wager. If they want to wager something more than they
+        % have, ask them to input again.
+        wagerAmount = input("\nHow much would you like to wager on this game?");
+        if wagerAmount > balanceAmount
+            fprintf("\nI'm sorry you can not bet more than you have in your balance!\n")
+            wagerAmount = input("\nPlease input a new wager on this game:");
+        end
+        fprintf("\nThe random base number is %i\n\n", baseNumber)
+        fprintf("I have now chosen another random number for you to guess whether it is over or under\n\n")
+        overUnderDecision = input("Do you think that my number is over or under the first number? Choose Wisely!", 's');
+
+        % Open an if statement to determine whether the user input matches the
+        % position of the guess number compared to the base number, then print
+        % out a statement about whether they won or lost
+        if (isequal(overUnderDecision, "over") | isequal(overUnderDecision, "Over") | isequal(overUnderDecision, "OVER") | isequal(overUnderDecision, " over") | isequal(overUnderDecision, " Over") | isequal(overUnderDecision, " OVER")) && (guessNumber > baseNumber)
+            fprintf("\nThat is correct! My guess number was %g, thanks for playing! You win this time, but I will beat you next time!\n",guessNumber);
+            balanceAmount = balanceAmount + (wagerAmount * 2);
+            fprintf("\nYour current balance is %i\n", balanceAmount);
+        elseif (isequal(overUnderDecision, "under") | isequal(overUnderDecision, "Under") | isequal(overUnderDecision, "UNDER") | isequal(overUnderDecision, " under") | isequal(overUnderDecision, " Under") | isequal(overUnderDecision, " UNDER")) && (guessNumber < baseNumber)
+            fprintf("\nThat is correct! My guess number was %g, thanks for playing! You win this time, but I will beat you next time!\n",guessNumber);
+            balanceAmount = balanceAmount + (wagerAmount * 2);
+            fprintf("\nYour current balance is %i\n", balanceAmount);
+        elseif (isequal(overUnderDecision, "over") | isequal(overUnderDecision, "Over") | isequal(overUnderDecision, "OVER") | isequal(overUnderDecision, " over") | isequal(overUnderDecision, " Over") | isequal(overUnderDecision, " OVER")) && (guessNumber < baseNumber)
+            fprintf("\nThat is incorrect! My guess number was %g, thanks for playing! You thought you could beat the all powerful computer!\n",guessNumber);
+            balanceAmount = balanceAmount - wagerAmount;
+            fprintf("\nYour current balance is %i\n", balanceAmount);
+        elseif (isequal(overUnderDecision, "under") | isequal(overUnderDecision, "Under") | isequal(overUnderDecision, "UNDER") | isequal(overUnderDecision, " under") | isequal(overUnderDecision, " Under") | isequal(overUnderDecision, " UNDER")) && (guessNumber > baseNumber)
+            fprintf("\nThat is incorrect! My guess number was %g, thanks for playing! You thought you could beat the all powerful computer!\n",guessNumber);
+             balanceAmount = balanceAmount - wagerAmount;
+             fprintf("\nYour current balance is %i\n", balanceAmount);
+        end
+    end
+    % After they complete the first round, after them if they want to play
+    % again
+    fprintf("\n");
+    if balanceAmount > 0
+        subsequentGame = input("Would you like to keep playing?", 's');
+        if isequal(subsequentGame, " no")
+            fprintf("\nThank you for playing, enjoy your day!");
+            break
+        end
+    % If they are out of money or they are negative in balance, print a
+    % statement accordingly and end the game
+    elseif balanceAmount == 0
+        fprintf("I'm sorry, you are out of money, thank you for playing!");
+    else
+        fprintf("I'm sorry, you are out of money, please step away from the computer!");
+    end
+end
